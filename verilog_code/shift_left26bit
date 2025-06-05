@@ -1,0 +1,6 @@
+module ShiftLeft_2_26bit(
+    input [25:0] am,
+    output  [27:0] out);
+
+assign out= am << 2;
+endmodule
