@@ -1,0 +1,5 @@
+module andgate(
+input p,q,
+output out);
+assign out = p & q;
+endmodule
