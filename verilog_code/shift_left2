@@ -1,0 +1,7 @@
+module ShiftLeft_2(
+    input [31:0] a,
+    output [31:0] Out);
+
+assign Out = a << 2;
+
+endmodule
