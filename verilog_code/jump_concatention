@@ -1,0 +1,10 @@
+module jump_Concatination(
+    input [27:0] in_28bit,
+    input [3:0] pc_plus4,
+    output reg [31:0] jump_address
+    );
+always @(*)
+begin
+jump_address= {pc_plus4, in_28bit};
+end
+endmodule
