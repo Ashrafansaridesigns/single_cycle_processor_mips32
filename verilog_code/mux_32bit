@@ -1,0 +1,6 @@
+module mux32bit_2x1(
+input [31:0] p,q,
+input sel,
+output [31:0] out);
+assign out = (sel)? q : p;
+endmodule
