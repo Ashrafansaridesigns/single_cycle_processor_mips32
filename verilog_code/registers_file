@@ -1,0 +1,23 @@
+module registerfile(
+input clk,rst,regwrite_cont,
+input [4:0] read_reg1,read_reg2,write_reg,
+input [31:0] write_data,
+output [31:0] reg1_data,
+output [31:0] reg2_data);
+
+reg [31:0] registers[31:0];
+integer k;
+
+always@(posedge clk)begin
+if(rst)begin
+for(k = 0 ; k < 32 ;k = k+1)begin
+registers [k] <= 32'd0;
+end
+end
+else if(regwrite_cont)begin
+registers[write_reg] <= write_data;
+end
+end
+assign reg1_data = registers[read_reg1];
+assign reg2_data = registers[read_reg2];
+endmodule
