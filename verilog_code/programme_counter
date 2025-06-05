@@ -1,0 +1,21 @@
+module programme_counter(
+input clk,rst,
+input [31:0] pc_in,
+output reg [31:0] pc_out);
+
+always@(posedge clk) begin
+if(rst) begin
+pc_out = 32'd0;
+end
+else begin
+pc_out = pc_in;
+end
+end
+endmodule
+
+module pc_4(
+input [31:0] pc_4_in,
+output [31:0] pc_4_out);
+
+assign pc_4_out = 32'd4+ pc_4_in;
+endmodule
