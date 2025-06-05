@@ -1,0 +1,9 @@
+module adder_alu(
+input [31:0] a,
+input [31:0] b,
+output reg [31:0] Result);
+always@(*)
+begin
+Result= a+b;
+end
+endmodule
