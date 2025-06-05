@@ -1,1 +1,54 @@
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: IIT Jammu
+// Engineer: Ashraf Ansari
+// 
+// Create Date: 05/27/2025 09:41:18 AM
+// Design Name: Signle cycle mips 32 processor
+// Module Name: single_cycle_mips32
+// Project Name: processor design
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
 
+
+module single_cycle_mips32(
+input clk,rst);
+wire [31:0] pc_top,pcin_top,instruction_top,next_pc_top,jump_address_top,shift2,shiftby2_top,writeback_top,read_data1_top,read_data2_top;
+wire [31:0] m4ka_top,ALU_Result_top,sum_out_top,BEQ_mux_out,Memdata_out_top;
+wire [27:0] jump_uptoadd;
+wire [2:0] ALU_control_top;
+wire [4:0] Rd_top;
+wire RegDst_top,zero_top,and_out_top,Jump_top,Branch_top,MemRead_top,MemtoReg_top,ALUop1_top,ALUop2_top;
+wire Regwrite_top,MemWrite_top,ALUSrc_top;
+
+programme_counter programme_counter(.clk(clk),.rst(rst),.pc_in(pcin_top),.pc_out(pc_top));
+Instruction_Memmory Instruction_Memmory(.read_address(pc_top),.instruction_out(instruction_top));
+pc_4 pc_4(.pc_4_in(pc_top),.pc_4_out(next_pc_top));
+ShiftLeft_2_26bit ShiftLeft_2_26bit(.am(instruction_top[25:0]),.out(jump_uptoadd));
+jump_Concatination jump_Concatination(.in_28bit(jump_uptoadd),.pc_plus4(next_pc_top[31:28]),.jump_address(jump_address_top));
+mux5bit_2x1 mux0(.p(instruction_top[20:16]),.q(instruction_top[15:11]),.sel(RegDst_top),.out(Rd_top));
+Sign_Extension sem0(.In(instruction_top[15:0]),.Out(shift2));
+ShiftLeft_2 ShiftLeft_2(.a(shift2),.Out(shiftby2_top));
+registerfile registerfile(.clk(clk),.rst(rst),.regwrite_cont(Regwrite_top),.read_reg1(instruction_top[25:21]),.read_reg2(instruction_top[20:16]),.write_reg(Rd_top),.write_data(writeback_top),.reg1_data(read_data1_top),.reg2_data(read_data2_top));
+mux32bit_2x1 mux1(.p(read_data2_top),.q(shift2),.sel(ALUSrc_top),.out(m4ka_top));
+alu_controller alu_controller(.alu_op1(ALUop1_top),.alu_op2(ALUop2_top),.functions(instruction_top[5:0]),.alu_control(ALU_control_top));
+alu alu_main(.a(read_data1_top),.b(m4ka_top),.select(ALU_control_top),.zero(zero_top),.result(ALU_Result_top));
+andgate an0(.p(zero_top),.q(Branch_top),.out(and_out_top));
+adder_alu adder_alu(.a(shiftby2_top),.b(next_pc_top),.Result(sum_out_top));
+mux32bit_2x1 mux2(.p(next_pc_top),.q(sum_out_top),.sel(and_out_top),.out(BEQ_mux_out));
+mux32bit_2x1 mux3(.q(jump_address_top),.p(BEQ_mux_out),.sel(Jump_top),.out(pcin_top));
+Data_Memory data_memory(.Address(ALU_Result_top),.Write_data(read_data2_top),.Mem_Write(MemWrite_top),.Mem_Read(MemRead_top),.Read_data(Memdata_out_top));
+mux32bit_2x1 mux4(.q(Memdata_out_top),.p(ALU_Result_top),.sel(MemtoReg_top),.out(writeback_top));
+Control_Main controller_main(.opcode(instruction_top[31:26]),.RegDst(RegDst_top),.Jump(Jump_top),.Branch(Branch_top),.MemRead(MemRead_top),.MemtoReg(MemtoReg_top),.ALUop1(ALUop1_top),.ALUop2(ALUop2_top),.MemWrite(MemWrite_top),.RegWrite(Regwrite_top),.ALUSrc(ALUSrc_top));
+
+
+endmodule
