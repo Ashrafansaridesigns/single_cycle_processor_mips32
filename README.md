@@ -1,1 +1,3 @@
 # single_cycle_processor_mips32
+A single-cycle processor is a microprocessor architecture that completes the execution of each instruction within a single clock cycle. Unlike multi-cycle processors, which divide instruction execution across multiple cycles, single-cycle designs aim for simplicity and predictability at the cost of potentially lower clock frequency.
+The MIPS32 architecture is a widely adopted 32-bit RISC (Reduced Instruction Set Computer) architecture known for its streamlined instruction set and efficient performance. It is extensively used in embedded systems, networking hardware, and consumer electronics due to its balance of simplicity, low power consumption, and execution speed.
